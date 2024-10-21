@@ -11,11 +11,17 @@ class PessoaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pessoas = Pessoa::all();
-        return view('pessoa.index', compact('pessoas'));
+        $query = $request->input('search');
+        $pessoas = Pessoa::when($query, function ($queryBuilder) use ($query) {
+            return $queryBuilder->where('nome', 'like', "%{$query}%")
+                                ->orWhere('email', 'like', "%{$query}%");
+        })->get();
+
+        return view('pessoa.index', compact('pessoas', 'query'));
     }
+
 
 
     /**
