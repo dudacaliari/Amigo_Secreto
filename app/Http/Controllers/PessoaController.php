@@ -23,7 +23,6 @@ class PessoaController extends Controller
     }
 
 
-
     /**
      * Show the form for creating a new resource.
      */
@@ -103,6 +102,12 @@ class PessoaController extends Controller
         }
 
         return view('pessoa.sorteio', compact('resultados'));
+    }
+
+    public function confirmarDelecao($id)
+    {
+        $pessoa = Pessoa::findOrFail($id);
+        return view('pessoa.confirmar_delecao', compact('pessoa'));
     }
 
     

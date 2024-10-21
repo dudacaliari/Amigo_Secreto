@@ -29,11 +29,7 @@
                     <td>{{ $pessoa->email }}</td>
                     <td>
                         <a href="{{ route('pessoa.edit', $pessoa->id) }}" class="btn btn-warning">Editar</a>
-                        <form action="{{ route('pessoa.destroy', $pessoa->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Deletar</button>
-                        </form>
+                        <a href="{{ route('pessoa.confirmarDelecao', $pessoa->id) }}" class="btn btn-danger">Deletar</a>
                     </td>
                 </tr>
             @endforeach
