@@ -22,7 +22,6 @@ class PessoaController extends Controller
         return view('pessoa.index', compact('pessoas', 'query'));
     }
 
-
     /**
      * Show the form for creating a new resource.
      */
