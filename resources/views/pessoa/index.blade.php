@@ -4,6 +4,13 @@
 <div class="container">
     <h1>Pessoas</h1>
 
+    <!-- Exibição da mensagem de sucesso -->
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <form action="{{ route('home') }}" method="GET" class="mb-3">
         <div class="input-group">
             <input type="text" name="search" class="form-control" placeholder="Buscar por nome ou email" value="{{ old('search', $query) }}">
@@ -25,10 +32,11 @@
         <tbody>
             @foreach($pessoas as $pessoa)
                 <tr>
-                    <td>{{ $pessoa->nome }}</td>
+                    <td>
+                        <a href="{{ route('pessoa.edit', $pessoa->id) }}">{{ $pessoa->nome }}</a>
+                    </td>
                     <td>{{ $pessoa->email }}</td>
                     <td>
-                        <a href="{{ route('pessoa.edit', $pessoa->id) }}" class="btn btn-warning">Editar</a>
                         <a href="{{ route('pessoa.confirmarDelecao', $pessoa->id) }}" class="btn btn-danger">Deletar</a>
                     </td>
                 </tr>

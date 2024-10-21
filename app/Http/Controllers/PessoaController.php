@@ -80,6 +80,7 @@ class PessoaController extends Controller
         return redirect()->route('home')->with('success', 'Pessoa atualizada com sucesso!');
     }
     
+    
     /**
      * Remove the specified resource from storage.
      */
