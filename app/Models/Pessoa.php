@@ -10,5 +10,5 @@ class Pessoa extends Model
     use HasFactory;
 
     // Defina os campos que podem ser preenchidos em massa
-    protected $fillable = ['nome', 'email'];
+    protected $fillable = ['nome', 'sobrenome', 'email'];
 }

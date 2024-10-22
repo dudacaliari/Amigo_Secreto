@@ -33,7 +33,9 @@
             @foreach($pessoas as $pessoa)
                 <tr>
                     <td>
-                        <a href="{{ route('pessoa.edit', $pessoa->id) }}">{{ $pessoa->nome }}</a>
+                        <a href="{{ route('pessoa.edit', $pessoa->id) }}">
+                            {{ $pessoa->nome }} {{ $pessoa->sobrenome }}
+                        </a>
                     </td>
                     <td>{{ $pessoa->email }}</td>
                     <td>

@@ -16,11 +16,13 @@ class PessoaController extends Controller
         $query = $request->input('search');
         $pessoas = Pessoa::when($query, function ($queryBuilder) use ($query) {
             return $queryBuilder->where('nome', 'like', "%{$query}%")
+                                ->orWhere('sobrenome', 'like', "%{$query}%") // Adicionando a busca por sobrenome
                                 ->orWhere('email', 'like', "%{$query}%");
         })->get();
-
+    
         return view('pessoa.index', compact('pessoas', 'query'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -36,13 +38,26 @@ class PessoaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nome' => 'required',
+            'nome' => 'required|min:3',
+            'sobrenome' => 'required|min:3',
             'email' => 'required|email|unique:pessoas,email',
         ]);
-
-        Pessoa::create($request->all());
+    
+        // Verifica se já existe uma combinação de nome e sobrenome
+        if (Pessoa::where('nome', $request->nome)
+                ->where('sobrenome', $request->sobrenome)
+                ->exists()) {
+            return back()->withErrors([
+                'nome_completo' => 'Este nome e sobrenome já estão cadastrados.',
+            ])->withInput();
+        }
+    
+        // Cria a pessoa com os campos necessários
+        Pessoa::create($request->only(['nome', 'sobrenome', 'email']));
+    
         return redirect()->route('home')->with('success', 'Pessoa cadastrada com sucesso!');
     }
+
 
 
     /**
@@ -66,19 +81,31 @@ class PessoaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Pessoa $pessoa, $id)
     {
         $request->validate([
-            'nome' => 'required',
-            'email' => 'required|email|unique:pessoas,email,' . $id,
+            'nome' => 'required|min:3',
+            'sobrenome' => 'required|min:3',
+            'email' => 'required|email|unique:pessoas,email,' . $id, // Corrigindo a regra de unicidade
         ]);
-    
+
+        // Verifica se já existe uma combinação de nome e sobrenome, ignorando o registro atual
+        if (Pessoa::where('nome', $pessoa->id)
+                ->where('sobrenome', $pessoa->id)
+                ->where('id', '!=', $pessoa->id)
+                ->exists()) {
+            return back()->withErrors([
+                'nome_completo' => 'Este nome e sobrenome já estão cadastrados.',
+            ])->withInput();
+        }
+
         $pessoa = Pessoa::findOrFail($id);
         $pessoa->update($request->all());
     
         return redirect()->route('home')->with('success', 'Pessoa atualizada com sucesso!');
     }
-    
+
+        
     
     /**
      * Remove the specified resource from storage.
