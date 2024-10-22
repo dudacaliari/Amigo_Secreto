@@ -36,6 +36,11 @@
                         <a href="{{ route('pessoa.edit', $pessoa->id) }}">
                             {{ $pessoa->nome }} {{ $pessoa->sobrenome }}
                         </a>
+                        <div>
+                            @foreach($pessoa->gifts as $gift)
+                                <span class="badge bg-secondary">{{ $gift->nome }}</span>
+                            @endforeach
+                        </div>
                     </td>
                     <td>{{ $pessoa->email }}</td>
                     <td>

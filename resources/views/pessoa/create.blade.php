@@ -46,14 +46,54 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary" id="saveButton" disabled>Salvar</button>
+        <div class="mb-3">
+            <label class="form-label">Sugestões de Presente</label>
+            <div id="giftSuggestions">
+                <!-- Sugestões de presente pré-definidas -->
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="gifts[]" value="1" id="gift1">
+                    <label class="form-check-label" for="gift1">Livro</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="gifts[]" value="2" id="gift2">
+                    <label class="form-check-label" for="gift2">Roupas</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="gifts[]" value="3" id="gift3">
+                    <label class="form-check-label" for="gift3">Eletrônicos</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="gifts[]" value="4" id="gift4">
+                    <label class="form-check-label" for="gift4">Experiência (viagem, jantar, etc.)</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="gifts[]" value="5" id="gift5">
+                    <label class="form-check-label" for="gift5">Flores</label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="saveButton">Salvar</button>
     </form>
 
     <script>
         function validateForm() {
-            const form = document.querySelector('form');
-            const button = document.getElementById('saveButton');
-            button.disabled = !form.checkValidity();
+            const nome = document.getElementById('nome').value;
+            const sobrenome = document.getElementById('sobrenome').value;
+            const email = document.getElementById('email').value;
+            const saveButton = document.getElementById('saveButton');
+
+            // Habilitar botão somente se todos os campos obrigatórios estiverem preenchidos
+            if (nome.length >= 3 && sobrenome.length >= 3 && email) {
+                saveButton.disabled = false;
+            } else {
+                saveButton.disabled = true;
+            }
         }
+
+        // Inicializa o estado do botão salvar
+        document.addEventListener("DOMContentLoaded", function() {
+            validateForm();
+        });
     </script>
 @endsection
