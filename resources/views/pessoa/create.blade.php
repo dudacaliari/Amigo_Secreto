@@ -49,27 +49,12 @@
         <div class="mb-3">
             <label class="form-label">Sugestões de Presente</label>
             <div id="giftSuggestions">
-                <!-- Sugestões de presente pré-definidas -->
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="gifts[]" value="1" id="gift1">
-                    <label class="form-check-label" for="gift1">Livro</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="gifts[]" value="2" id="gift2">
-                    <label class="form-check-label" for="gift2">Roupas</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="gifts[]" value="3" id="gift3">
-                    <label class="form-check-label" for="gift3">Eletrônicos</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="gifts[]" value="4" id="gift4">
-                    <label class="form-check-label" for="gift4">Experiência (viagem, jantar, etc.)</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="gifts[]" value="5" id="gift5">
-                    <label class="form-check-label" for="gift5">Flores</label>
-                </div>
+                @foreach($gifts as $gift)
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="gifts[]" value="{{ $gift->id }}" id="gift{{ $gift->id }}">
+                        <label class="form-check-label" for="gift{{ $gift->id }}">{{ $gift->nome }}</label>
+                    </div>
+                @endforeach
             </div>
         </div>
 
