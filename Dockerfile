@@ -1,42 +1,36 @@
-# Usar a imagem oficial do PHP 8.3 com Apache
-FROM php:8.3.12-fpm
+# Usa a imagem oficial do PHP com Apache
+FROM php:8.1-apache
 
-# Instalar as extensões do PHP necessárias
+# Instala extensões necessárias (incluindo extensões MySQL)
 RUN apt-get update && apt-get install -y \
-    libzip-dev \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    curl \
     unzip \
-    && docker-php-ext-install zip \
-    && docker-php-ext-install pdo_mysql \
-    && docker-php-ext-install gd \
-    && docker-php-ext-install intl \
-    && docker-php-ext-install mbstring \
-    && docker-php-ext-install soap \
-    && docker-php-ext-install sockets \
-    && docker-php-ext-install sodium \
-    && docker-php-ext-install exif \
-    && docker-php-ext-install gmp \
-    && docker-php-ext-install mysqli
+    git \
+    default-mysql-client \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Instalar o Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Habilita o módulo de regravação do Apache
+RUN a2enmod rewrite
 
-# Definir o diretório de trabalho
-WORKDIR /var/www
+# Define o diretório de trabalho
+WORKDIR /var/www/html
 
-# Copiar o conteúdo do projeto para o contêiner
+# Copia os arquivos do projeto para o contêiner
 COPY . .
 
-# Instalar as dependências do Laravel
+# Instala as dependências do Laravel
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install --no-dev --optimize-autoloader
 
-# Copiar o arquivo .env.example para .env
-COPY .env.example .env
+# Dá permissões corretas para as pastas de cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Gerar a chave da aplicação Laravel
-RUN php artisan key:generate
+# Exponha a porta 80 para o Apache
+EXPOSE 80
 
-# Expor a porta que o PHP-FPM está escutando
-EXPOSE 9000
-
-# Iniciar o PHP-FPM
-CMD ["php-fpm"]
+# Comando para iniciar o Apache
+CMD ["apache2-foreground"]
