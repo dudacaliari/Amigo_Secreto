@@ -1,7 +1,7 @@
 # Usa a imagem oficial do PHP 8.1 com FPM
 FROM php:8.1-fpm
 
-# Instala dependências do sistema e extensões PHP necessárias
+# Instala dependências necessárias do sistema
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
@@ -15,6 +15,8 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     libssl-dev \
+    libsodium-dev \
+    pkg-config \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd \
     && docker-php-ext-install zip \
@@ -34,13 +36,13 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Define o diretório de trabalho
 WORKDIR /var/www/html
 
-# Copia os arquivos da aplicação Laravel
+# Copia os arquivos da aplicação Laravel para dentro do container
 COPY . .
 
-# Instala as dependências do Laravel usando Composer
+# Instala as dependências do Laravel com Composer
 RUN composer install --no-dev --optimize-autoloader
 
-# Configura permissões para os diretórios de cache
+# Ajusta permissões para os diretórios necessários
 RUN chmod -R 775 storage bootstrap/cache
 
 # Expõe a porta 8000 para o serviço
