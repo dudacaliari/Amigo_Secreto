@@ -1,11 +1,12 @@
-# Usa a imagem oficial do PHP 8.1 com FPM
+# Usa a imagem oficial do PHP com FPM
 FROM php:8.1-fpm
 
-# Instala dependências necessárias do sistema
+# Instala as dependências necessárias do sistema
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
     git \
+    curl \
     libpng-dev \
     libicu-dev \
     libxml2-dev \
@@ -14,7 +15,6 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
-    libssl-dev \
     libsodium-dev \
     pkg-config \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -30,7 +30,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install gmp \
     && docker-php-ext-install mysqli
 
-# Instala o Composer
+# Copia o Composer para dentro do container
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Define o diretório de trabalho
@@ -39,11 +39,12 @@ WORKDIR /var/www/html
 # Copia os arquivos da aplicação Laravel para dentro do container
 COPY . .
 
-# Instala as dependências do Laravel com Composer
-RUN composer install --no-dev --optimize-autoloader
+# Ajusta permissões para evitar erros
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 storage bootstrap/cache
 
-# Ajusta permissões para os diretórios necessários
-RUN chmod -R 775 storage bootstrap/cache
+# Instala as dependências do Laravel
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
 # Expõe a porta 8000 para o serviço
 EXPOSE 8000
