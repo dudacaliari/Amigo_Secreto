@@ -18,22 +18,25 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install mysqli
 
 # Instalar o Composer
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
-
-# Habilitar o módulo de reescrita do Apache
-RUN a2enmod rewrite
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Definir o diretório de trabalho
-WORKDIR /var/www/html
+WORKDIR /var/www
 
-# Copiar o restante dos arquivos do projeto para o contêiner
+# Copiar o conteúdo do projeto para o contêiner
 COPY . .
 
 # Instalar as dependências do Laravel
-RUN composer install
+RUN composer install --no-dev --optimize-autoloader
 
-# Copiar as permissões de pastas
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Copiar o arquivo .env.example para .env
+COPY .env.example .env
 
-# Expor a porta 80
-EXPOSE 80
+# Gerar a chave da aplicação Laravel
+RUN php artisan key:generate
+
+# Expor a porta que o PHP-FPM está escutando
+EXPOSE 9000
+
+# Iniciar o PHP-FPM
+CMD ["php-fpm"]
