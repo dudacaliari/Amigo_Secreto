@@ -1,16 +1,10 @@
-# Usa a imagem oficial do PHP com Apache
-FROM php:8.1-apache
+# Escolhe a imagem PHP com extensões necessárias para Laravel
+FROM php:8.1-fpm
 
-# Instala dependências do sistema e extensões necessárias do PHP
+# Instala dependências do sistema
 RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    default-mysql-client \
-    git \
-    unzip \
-    curl \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+    git unzip libpq-dev libonig-dev libzip-dev curl \
+    && docker-php-ext-install pdo pdo_mysql
 
 # Instala o Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -18,21 +12,17 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Define o diretório de trabalho
 WORKDIR /var/www/html
 
-# Copia os arquivos do projeto para o contêiner
+# Copia os arquivos da aplicação para o contêiner
 COPY . .
 
-# Dá permissões corretas às pastas necessárias
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Instala as dependências do Laravel sem os pacotes de desenvolvimento
+# Instala as dependências do Laravel
 RUN composer install --no-dev --optimize-autoloader
 
-# Habilita o módulo rewrite do Apache
-RUN a2enmod rewrite
+# Configura permissões
+RUN chmod -R 775 storage bootstrap/cache
 
-# Exponha a porta 80 para acesso externo
-EXPOSE 80
+# Define a porta que o contêiner vai expor
+EXPOSE 8000
 
-# Inicia o Apache quando o contêiner é iniciado
-CMD ["apache2-foreground"]
+# Comando para iniciar o servidor PHP embutido
+CMD php artisan serve --host=0.0.0.0 --port=8000
