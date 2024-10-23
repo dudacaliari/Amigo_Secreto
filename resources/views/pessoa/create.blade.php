@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Cadastrar Pessoa</h1>
+    <h1 class="titulo">Novo Participante</h1>
 
     @if(session('success'))
         <div class="alert alert-success">
@@ -62,6 +62,6 @@
     </form>
 
     <!-- Incluindo os arquivos CSS e JS -->
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <script src="{{ asset('js/scripts.js') }}"></script>
 @endsection

@@ -10,4 +10,7 @@
     </ul>
     <a href="{{ route('home') }}" class="btn btn-primary mt-3">Voltar para a Home</a>
 </div>
+
+    <!-- Incluindo os arquivos CSS e JS -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 @endsection

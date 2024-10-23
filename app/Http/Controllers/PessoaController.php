@@ -63,7 +63,7 @@ class PessoaController extends Controller
             $pessoa->gifts()->attach($request->input('gifts'));
         }
     
-        return redirect()->route('home')->with('success', 'Pessoa cadastrada com sucesso!');
+        return redirect()->route('home')->with('success', 'Participante cadastrado com sucesso!');
     }
     
 
@@ -123,7 +123,7 @@ class PessoaController extends Controller
     
         $pessoa->save();
     
-        return redirect()->route('home')->with('success', 'Pessoa atualizada com sucesso!');
+        return redirect()->route('home')->with('success', 'Participante atualizado com sucesso!');
     }
     
 
@@ -137,7 +137,7 @@ class PessoaController extends Controller
         $pessoa = Pessoa::findOrFail($id);
         $pessoa->delete();
     
-        return redirect()->route('home')->with('success', 'Pessoa deletada com sucesso!');
+        return redirect()->route('home')->with('success', 'Participante deletado com sucesso!');
     }
 
     public function sorteio()

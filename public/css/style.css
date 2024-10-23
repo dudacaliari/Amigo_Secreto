@@ -1,0 +1,92 @@
+body {
+    background-color: #ffffff; /* Cor de fundo */
+    color: #333; /* Cor do texto */
+}
+
+form{
+    margin-bottom: 10%;
+}
+
+.titulo{
+    margin: 3%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    text-align: center;
+}
+
+.table {
+    background-color: #ffffff; /* Cor de fundo da tabela */
+    margin-top: 3%;
+}
+
+.table th {
+    background-color: #3e3e3e; /* Cabeçalhos da tabela */
+    color: #fff; /* Texto em branco */
+}
+
+.btn-primary {
+    background-color: #6f8a74; /* Cor do botão primário */
+    border-color: #6f8a74; /* Borda do botão */
+}
+
+
+.btn-primary:hover {
+    background-color: #245a2e; /* Cor do botão primário */
+    border-color: #6f8a74; /* Borda do botão */
+}
+
+.btn-success {
+    background-color: #357541; /* Botão de sucesso */
+}
+
+.pessoa_link{
+    color: black;
+}
+
+/* Estilização das Tags de Gifts */
+.badge.gift-1 {
+    background-color: #741952; /* Coral */
+}
+
+.badge.gift-2 {
+    background-color: #bf1e62; /* Ouro */
+}
+
+.badge.gift-3 {
+    background-color: #ee9e81; /* Verde claro */
+}
+
+.badge.gift-4 {
+    background-color: #94bb68; /* Turquesa escuro */
+}
+
+.badge.gift-5 {
+    background-color: #09a3ad; /* Rosa quente */
+}
+
+.badge.gift-6 {
+    background-color: #741952; /* Coral */
+}
+
+.badge.gift-7 {
+    background-color: #bf1e62; /* Ouro */
+}
+
+.badge.gift-8 {
+    background-color: #ee9e81; /* Verde claro */
+}
+
+.badge.gift-9 {
+    background-color: #94bb68; /* Turquesa escuro */
+}
+
+.badge.gift-10 {
+    background-color: #09a3ad; /* Rosa quente */
+}
+
+#giftSuggestions{
+    display:flex;
+}
+
+.form-check{
+    margin-left: 5px;
+}
