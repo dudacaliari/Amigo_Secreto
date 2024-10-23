@@ -1,20 +1,19 @@
 # Usa a imagem oficial do PHP com Apache
 FROM php:8.1-apache
 
-# Instala extensões necessárias (incluindo extensões MySQL)
+# Instala dependências do sistema e extensões necessárias do PHP
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    zip \
-    curl \
-    unzip \
-    git \
     default-mysql-client \
+    git \
+    unzip \
+    curl \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Habilita o módulo de regravação do Apache
-RUN a2enmod rewrite
+# Instala o Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Define o diretório de trabalho
 WORKDIR /var/www/html
@@ -22,15 +21,18 @@ WORKDIR /var/www/html
 # Copia os arquivos do projeto para o contêiner
 COPY . .
 
-# Instala as dependências do Laravel
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Dá permissões corretas às pastas necessárias
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Instala as dependências do Laravel sem os pacotes de desenvolvimento
 RUN composer install --no-dev --optimize-autoloader
 
-# Dá permissões corretas para as pastas de cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Habilita o módulo rewrite do Apache
+RUN a2enmod rewrite
 
-# Exponha a porta 80 para o Apache
+# Exponha a porta 80 para acesso externo
 EXPOSE 80
 
-# Comando para iniciar o Apache
+# Inicia o Apache quando o contêiner é iniciado
 CMD ["apache2-foreground"]
