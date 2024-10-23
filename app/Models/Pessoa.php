@@ -11,4 +11,12 @@ class Pessoa extends Model
 
     // Defina os campos que podem ser preenchidos em massa
     protected $fillable = ['nome', 'sobrenome', 'email'];
+
+    /**
+     * Relacionamento com Gift (Muitos-para-Muitos).
+     */
+    public function gifts()
+    {
+        return $this->belongsToMany(Gift::class, 'pessoa_gift');
+    }
 }

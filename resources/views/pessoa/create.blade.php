@@ -46,7 +46,19 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary" id="saveButton" disabled>Salvar</button>
+        <div class="mb-3">
+            <label class="form-label">Sugestões de Presente</label>
+            <div id="giftSuggestions">
+                @foreach($gifts as $gift)
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="gifts[]" value="{{ $gift->id }}" id="gift{{ $gift->id }}">
+                        <label class="form-check-label" for="gift{{ $gift->id }}">{{ $gift->nome }}</label>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="saveButton">Salvar</button>
     </form>
 
     <script>
@@ -54,6 +66,22 @@
             const form = document.querySelector('form');
             const button = document.getElementById('saveButton');
             button.disabled = !form.checkValidity();
+            const nome = document.getElementById('nome').value;
+            const sobrenome = document.getElementById('sobrenome').value;
+            const email = document.getElementById('email').value;
+            const saveButton = document.getElementById('saveButton');
+
+            // Habilitar botão somente se todos os campos obrigatórios estiverem preenchidos
+            if (nome.length >= 3 && sobrenome.length >= 3 && email) {
+                saveButton.disabled = false;
+            } else {
+                saveButton.disabled = true;
+            }
         }
+
+        // Inicializa o estado do botão salvar
+        document.addEventListener("DOMContentLoaded", function() {
+            validateForm();
+        });
     </script>
 @endsection
