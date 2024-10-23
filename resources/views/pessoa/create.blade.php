@@ -63,6 +63,9 @@
 
     <script>
         function validateForm() {
+            const form = document.querySelector('form');
+            const button = document.getElementById('saveButton');
+            button.disabled = !form.checkValidity();
             const nome = document.getElementById('nome').value;
             const sobrenome = document.getElementById('sobrenome').value;
             const email = document.getElementById('email').value;
